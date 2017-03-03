@@ -18,18 +18,18 @@
       	<msg v-for="msg in messages" :msg="msg"></msg>
 	  </div>
 	  <div id="bottom" class="chat-text g-bg fixed is-flex v-centered w full-width">
-	    <div id="chat-input" contenteditable="true" class="rounded w-bg" @focus="onFocus"  @blur="onBlur">
-	    </div>
+	    <div id="chat-input" contenteditable="true" class="rounded w-bg" @keyup.enter="onSend"></div>
 	  </div>
 	</div>
 </template>
 
 <script>
-	import Msg from '../components/Msg.vue'
+	import msg from '../components/Msg.vue'
 
 	export default {
 		data() {
 			return {
+				contentDiv: null,
 				messages: [
 					{ user:"John Smith", msg:"I had the same issue before" },
 					{ user:"Lee Bruce", msg:"Same here" },
@@ -41,18 +41,40 @@
 				]
 			}
 		},
+		mounted() {
+			this.contentDiv = document.querySelector('#content')
+
+			axios.get('http://174.138.73.211/api/user')
+				.then(
+					response => alert(response.data.name)
+				)
+			// axios.post('http://localhost:8000/api/user', {name:"Gaga123"})
+			// 	.then(
+			// 		response => console.log(response.data)
+			// 	)
+			// 	socket.on('connection', function(data) {
+			// 		alert('ok')
+			// 	})
+			//socket.emit('chat.message', {name:"Gaga12345"})
+			// socket.on('test-channel:FirstEvent', function(data) {
+			// 	alert('ffff')
+			// })
+		},
 		methods: {
-			onBlur() {
-				let top = document.querySelector('#top')
-				top.style.top = 0
+			onSend(e) {
+				let msg = e.target.innerText.trim()
+				if( msg ) {
+					this.messages.push({user:'',msg})
+					this.scrollToBottom()
+				}
+				e.target.innerText = ''
 			},
-			onFocus() { 
-				let top = document.querySelector('#top')
-				top.style.top = "52%"
+			scrollToBottom() {
+				this.contentDiv.scrollTop = 5000
 			}
 		},
 		components: {
-			'msg': Msg,
+			msg,
 		}
 	}
 </script>

@@ -9,7 +9,7 @@ const Chat = require('./pages/Chat.vue')
 const Router = {
 	mode: 'history',
   	routes: [
-      	{ path: rootPath, component: Feed },
+      	{ path: rootPath, component: Chat },
       	{ path: '/feeds', component: Feed },
       	{ path: '/chat', component: Chat },
   	]
